@@ -13,14 +13,13 @@ export default {
     {
       file: 'dist/index.umd.js',
       format: 'umd',
-      name: 'TagerAdminBlog',
+      name: 'TagerAdminImport',
     },
   ],
   external: [
     'vue',
     '@vue/composition-api',
     '@tager/admin-services',
-    '@tager/admin-dynamic-field',
     '@tager/admin-ui',
     '@tager/admin-layout',
     'path-to-regexp',
