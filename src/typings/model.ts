@@ -15,8 +15,13 @@ export interface ImportType {
 }
 
 export interface StrategyType {
-  id: string;
-  name: string;
+  readonly id: string;
+  readonly name: string;
+}
+
+export interface ModuleInfoType {
+  readonly fileScenario: string;
+  readonly strategies: Array<StrategyType>;
 }
 
 export interface ImportCreatePayload {

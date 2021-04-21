@@ -1,7 +1,7 @@
 import { request, ResponseBody } from '@tager/admin-services';
 
 import {
-  StrategyType,
+  ModuleInfoType,
   ImportCreatePayload,
   ImportType,
 } from '../typings/model';
@@ -13,8 +13,8 @@ export function getImportList(params?: {
   return request.get({ path: '/admin/tager/import', params });
 }
 
-export function getStrategyList(): Promise<ResponseBody<Array<StrategyType>>> {
-  return request.get({ path: '/admin/tager/import/strategies' });
+export function getModuleInfo(): Promise<ResponseBody<ModuleInfoType>> {
+  return request.get({ path: '/admin/tager/import/info' });
 }
 
 export function createImport(
