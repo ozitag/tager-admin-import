@@ -13,8 +13,8 @@ export function getImportList(params?: {
   return request.get({ path: '/admin/tager/import', params });
 }
 
-export function getStrategyList(): Promise<ResponseBody<Array<StrategyType>>> {
-  return request.get({ path: '/admin/tager/import/strategies' });
+export function getStrategyList(): Promise<ResponseBody<StrategyType>> {
+  return request.get({ path: '/admin/tager/import/info' });
 }
 
 export function createImport(

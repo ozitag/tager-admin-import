@@ -18,6 +18,7 @@
           :error="errors.file"
           :label="$t('import:file')"
           name="file"
+          :scenario="strategyFileScenario"
         />
       </template>
     </form>
@@ -71,8 +72,12 @@ export default defineComponent({
       resourceName: 'Strategy List',
     });
 
+    const strategyFileScenario = computed(
+      () => strategyList.value.fileScenario
+    );
+
     const strategyOptionList = computed<Array<OptionType>>(() =>
-      strategyList.value.map<OptionType>((strategy) => ({
+      strategyList.value.strategies.map<OptionType>((strategy) => ({
         value: strategy.id,
         label: strategy.name,
       }))
@@ -141,6 +146,7 @@ export default defineComponent({
       submitForm,
       getImportListUrl,
       strategyOptionList,
+      strategyFileScenario,
       isContentLoading,
     };
   },

@@ -14,9 +14,14 @@ export interface ImportType {
   readonly file: FileType | null;
 }
 
+export interface StrategyItemType {
+  readonly id: string;
+  readonly name: string;
+}
+
 export interface StrategyType {
-  id: string;
-  name: string;
+  readonly fileScenario: string;
+  readonly strategies: Array<StrategyItemType>;
 }
 
 export interface ImportCreatePayload {
