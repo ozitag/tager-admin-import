@@ -14,14 +14,14 @@ export interface ImportType {
   readonly file: FileType | null;
 }
 
-export interface StrategyItemType {
+export interface StrategyType {
   readonly id: string;
   readonly name: string;
 }
 
-export interface StrategyType {
+export interface ModuleInfoType {
   readonly fileScenario: string;
-  readonly strategies: Array<StrategyItemType>;
+  readonly strategies: Array<StrategyType>;
 }
 
 export interface ImportCreatePayload {

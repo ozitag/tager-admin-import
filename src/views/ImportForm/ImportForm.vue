@@ -46,7 +46,7 @@ import {
   useTranslation,
 } from '@tager/admin-ui';
 
-import { createImport, getStrategyList } from '../../services/requests';
+import { createImport, getModuleInfo } from '../../services/requests';
 import { getImportListUrl } from '../../utils/paths';
 
 import {
@@ -63,28 +63,26 @@ export default defineComponent({
     /** Strategies */
 
     const [
-      fetchStrategyList,
-      { data: strategyList, loading: isStrategyListLoading },
+      fetchModuleInfo,
+      { data: moduleInfo, loading: isModuleInfoLoading },
     ] = useResource({
-      fetchResource: getStrategyList,
+      fetchResource: getModuleInfo,
       initialValue: [],
       context,
-      resourceName: 'Strategy List',
+      resourceName: 'Module info',
     });
 
-    const strategyFileScenario = computed(
-      () => strategyList.value.fileScenario
-    );
+    const strategyFileScenario = computed(() => moduleInfo.value.fileScenario);
 
     const strategyOptionList = computed<Array<OptionType>>(() =>
-      strategyList.value.strategies.map<OptionType>((strategy) => ({
+      moduleInfo.value.strategies.map<OptionType>((strategy) => ({
         value: strategy.id,
         label: strategy.name,
       }))
     );
 
     onMounted(() => {
-      fetchStrategyList();
+      fetchModuleInfo();
     });
 
     /** Form state */
@@ -135,9 +133,7 @@ export default defineComponent({
 
     /** Is content loading **/
 
-    const isContentLoading = computed<boolean>(
-      () => isStrategyListLoading.value
-    );
+    const isContentLoading = computed<boolean>(() => isModuleInfoLoading.value);
 
     return {
       values,
