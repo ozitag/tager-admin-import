@@ -1,0 +1,11 @@
+{
+  "framework": "vue",
+  "name": "@tager/admin-import",
+  "version": "0.1.0",
+  "contributions": {
+    "html": {
+      "description-markup": "markdown",
+      "types-syntax": "typescript"
+    }
+  }
+}
