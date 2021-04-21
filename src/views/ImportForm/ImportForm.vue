@@ -67,18 +67,21 @@ export default defineComponent({
       { data: moduleInfo, loading: isModuleInfoLoading },
     ] = useResource({
       fetchResource: getModuleInfo,
-      initialValue: [],
+      initialValue: null,
       context,
       resourceName: 'Module info',
     });
 
-    const strategyFileScenario = computed(() => moduleInfo.value.fileScenario);
+    const strategyFileScenario = computed<string>(
+      () => moduleInfo.value?.fileScenario ?? ''
+    );
 
-    const strategyOptionList = computed<Array<OptionType>>(() =>
-      moduleInfo.value.strategies.map<OptionType>((strategy) => ({
-        value: strategy.id,
-        label: strategy.name,
-      }))
+    const strategyOptionList = computed<Array<OptionType>>(
+      () =>
+        moduleInfo.value?.strategies.map<OptionType>((strategy) => ({
+          value: strategy.id,
+          label: strategy.name,
+        })) ?? []
     );
 
     onMounted(() => {
