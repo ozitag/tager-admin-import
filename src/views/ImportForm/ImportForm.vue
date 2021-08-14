@@ -4,23 +4,27 @@
     :is-content-loading="isContentLoading"
   >
     <form novalidate @submit.prevent>
-      <template>
-        <form-field-select
-          v-model="values.strategy"
-          :options="strategyOptionList"
-          :error="errors.strategy"
-          name="importType"
-          :label="$t('import:importType')"
-        />
+      <form-field-select
+        v-model="values.strategy"
+        :options="strategyOptionList"
+        :error="errors.strategy"
+        name="importType"
+        :label="$t('import:importType')"
+      />
 
-        <form-field-file-input
-          v-model="values.file"
-          :error="errors.file"
-          :label="$t('import:file')"
-          name="file"
-          :scenario="strategyFileScenario"
-        />
-      </template>
+      <form-field-file-input
+        v-model="values.file"
+        :error="errors.file"
+        :label="$t('import:file')"
+        name="file"
+        :scenario="strategyFileScenario"
+      />
+
+      <DynamicField
+        v-for="field of templateValues"
+        :key="field.config.name"
+        :field="field"
+      />
     </form>
 
     <template v-slot:footer>
@@ -35,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent, watch } from '@vue/composition-api';
 import { computed, onMounted, ref } from '@vue/composition-api';
 
 import { convertRequestErrorToMap, useResource } from '@tager/admin-services';
@@ -45,18 +49,25 @@ import {
   FormFooter,
   useTranslation,
 } from '@tager/admin-ui';
+import {
+  DynamicField,
+  FieldConfigUnion,
+  FieldUnion,
+  universalFieldUtils,
+} from '@tager/admin-dynamic-field';
 
 import { createImport, getModuleInfo } from '../../services/requests';
 import { getImportListUrl } from '../../utils/paths';
 
 import {
   convertImportFormValuesToCreationPayload,
+  convertStrategiesToStrategyOptionList,
   FormValues,
 } from './ImportForm.helpers';
 
 export default defineComponent({
   name: 'ImportForm',
-  components: { FormFooter },
+  components: { DynamicField, FormFooter },
   setup(props, context) {
     const { t } = useTranslation(context);
 
@@ -67,21 +78,20 @@ export default defineComponent({
       { data: moduleInfo, loading: isModuleInfoLoading },
     ] = useResource({
       fetchResource: getModuleInfo,
-      initialValue: null,
+      initialValue: {
+        fileScenario: '',
+        strategies: [],
+      },
       context,
       resourceName: 'Module info',
     });
 
     const strategyFileScenario = computed<string>(
-      () => moduleInfo.value?.fileScenario ?? ''
+      () => moduleInfo.value.fileScenario
     );
 
-    const strategyOptionList = computed<Array<OptionType>>(
-      () =>
-        moduleInfo.value?.strategies.map<OptionType>((strategy) => ({
-          value: strategy.id,
-          label: strategy.name,
-        })) ?? []
+    const strategyOptionList = computed<Array<OptionType>>(() =>
+      convertStrategiesToStrategyOptionList(moduleInfo.value.strategies)
     );
 
     onMounted(() => {
@@ -93,12 +103,38 @@ export default defineComponent({
     const errors = ref<Record<string, string>>({});
     const values = ref<FormValues>({ strategy: null, file: null });
     const isSubmitting = ref<boolean>(false);
+    const templateValues = ref<Array<FieldUnion>>([]);
+
+    function updateTemplateValues() {
+      const selectedStrategy = moduleInfo.value.strategies.find(
+        (strategy) => strategy.id === values.value.strategy?.value
+      );
+
+      const fieldTemplateList: Array<FieldConfigUnion> =
+        selectedStrategy?.fields ?? [];
+
+      templateValues.value = fieldTemplateList.map((fieldConfig) =>
+        universalFieldUtils.createFormField(fieldConfig, null)
+      );
+    }
+
+    watch(
+      () => values.value.strategy,
+      () => {
+        updateTemplateValues();
+      }
+    );
+
+    onMounted(() => {
+      updateTemplateValues();
+    });
 
     function submitForm(event: TagerFormSubmitEvent) {
       isSubmitting.value = true;
 
       const creationPayload = convertImportFormValuesToCreationPayload(
-        values.value
+        values.value,
+        templateValues.value
       );
 
       createImport(creationPayload)
@@ -147,6 +183,7 @@ export default defineComponent({
       strategyOptionList,
       strategyFileScenario,
       isContentLoading,
+      templateValues,
     };
   },
 });
