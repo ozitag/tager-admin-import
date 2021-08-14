@@ -1,6 +1,11 @@
 import { FileType } from '@tager/admin-services';
+import {
+  FieldConfigUnion,
+  FieldShortType,
+  OutgoingValueUnion,
+} from '@tager/admin-dynamic-field';
 
-interface HistoryType {
+export interface HistoryType {
   readonly datetime: string;
   readonly status: string;
 }
@@ -17,6 +22,7 @@ export interface ImportType {
 export interface StrategyType {
   readonly id: string;
   readonly name: string;
+  readonly fields: Array<FieldConfigUnion>;
 }
 
 export interface ModuleInfoType {
@@ -27,4 +33,5 @@ export interface ModuleInfoType {
 export interface ImportCreatePayload {
   strategy: string;
   file: string;
+  params: Array<FieldShortType<OutgoingValueUnion>>;
 }
