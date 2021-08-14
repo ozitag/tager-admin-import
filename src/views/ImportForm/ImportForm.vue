@@ -4,23 +4,21 @@
     :is-content-loading="isContentLoading"
   >
     <form novalidate @submit.prevent>
-      <template>
-        <form-field-select
-          v-model="values.strategy"
-          :options="strategyOptionList"
-          :error="errors.strategy"
-          name="importType"
-          :label="$t('import:importType')"
-        />
+      <form-field-select
+        v-model="values.strategy"
+        :options="strategyOptionList"
+        :error="errors.strategy"
+        name="importType"
+        :label="$t('import:importType')"
+      />
 
-        <form-field-file-input
-          v-model="values.file"
-          :error="errors.file"
-          :label="$t('import:file')"
-          name="file"
-          :scenario="strategyFileScenario"
-        />
-      </template>
+      <form-field-file-input
+        v-model="values.file"
+        :error="errors.file"
+        :label="$t('import:file')"
+        name="file"
+        :scenario="strategyFileScenario"
+      />
 
       <DynamicField
         v-for="field of templateValues"
@@ -116,7 +114,7 @@ export default defineComponent({
         selectedStrategy?.fields ?? [];
 
       templateValues.value = fieldTemplateList.map((fieldConfig) =>
-        universalFieldUtils.createFormField(fieldConfig)
+        universalFieldUtils.createFormField(fieldConfig, null)
       );
     }
 
