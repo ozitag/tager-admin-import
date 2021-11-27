@@ -10,12 +10,18 @@ export interface HistoryType {
   readonly status: string;
 }
 
+export interface ParamType {
+  readonly label: string;
+  readonly value: string;
+}
+
 export interface ImportType {
   readonly id: number;
   readonly strategy: string;
   readonly status: string;
   readonly message: string | null;
   readonly history: Array<HistoryType>;
+  readonly params: Array<ParamType> | null;
   readonly file: FileType | null;
 }
 

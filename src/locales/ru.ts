@@ -11,6 +11,7 @@ const RU: typeof EN = {
   status: 'Статус',
   message: 'Сообщение',
   log: 'Лог',
+  params: 'Параметры',
   file: 'Файл',
   newImport: 'Новый импорт',
   importCreation: 'Создание импорта',

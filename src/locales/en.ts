@@ -9,6 +9,7 @@ const EN = {
   status: 'status',
   message: 'Message',
   log: 'Log',
+  params: 'Params',
   file: 'file',
   newImport: 'New import',
   importCreation: 'Import creation',

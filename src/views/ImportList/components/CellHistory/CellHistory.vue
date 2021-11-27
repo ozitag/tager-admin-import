@@ -36,6 +36,6 @@ export default defineComponent<Props>({
 <style lang="scss" scoped>
 .name {
   display: inline-block;
-  width: 100px;
+  width: 75px;
 }
 </style>

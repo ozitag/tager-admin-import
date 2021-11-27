@@ -88,31 +88,43 @@ export default defineComponent({
         id: 2,
         name: t('import:type'),
         field: 'strategy',
-        style: { width: '15%' },
-        headStyle: { width: '15%' },
+        style: { width: '150px' },
+        headStyle: { width: '150px' },
       },
       {
         id: 3,
-        name: t('import:status'),
-        field: 'status',
-        style: { width: '15%' },
-        headStyle: { width: '15%' },
+        name: t('import:params'),
+        field: 'params',
+        type: 'key-value',
+        format: ({ row }) => row.params ? row.params.map((param) => {
+          return {
+            key: param.label,
+            value: param.value
+          };
+        }) : null
       },
       {
         id: 4,
+        name: t('import:status'),
+        field: 'status',
+        style: { width: '120px' },
+        headStyle: { width: '120px' },
+      },
+      {
+        id: 5,
         name: t('import:message'),
         field: 'message',
       },
 
       {
-        id: 5,
+        id: 6,
         name: t('import:log'),
         field: 'history',
-        style: { width: '25%' },
-        headStyle: { width: '25%' },
+        style: { width: '250px' },
+        headStyle: { width: '250px' },
       },
       {
-        id: 6,
+        id: 7,
         name: t('import:file'),
         field: 'file',
         type: 'file',
