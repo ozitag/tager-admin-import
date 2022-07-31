@@ -1,6 +1,5 @@
-const EN = {
+export const EN = {
   home: 'Home',
-  exportAndImport: 'Export / Import',
   import: 'Import',
   importList: 'Import List',
   importForm: 'Import Form',
@@ -18,5 +17,3 @@ const EN = {
   createdSuccessMessage: 'Import has been successfully created',
   createdErrorMessage: 'Import creation has been failed',
 };
-
-export default EN;

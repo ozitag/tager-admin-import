@@ -1,53 +1,52 @@
 <template>
-  <page
-    :title="$t('import:importCreation')"
-    :is-content-loading="isContentLoading"
+  <Page
+      :title="$i18n.t('import:importCreation')"
+      :is-content-loading="isContentLoading"
   >
     <form novalidate @submit.prevent>
-      <form-field-select
-        v-model="values.strategy"
-        :options="strategyOptionList"
-        :error="errors.strategy"
-        name="importType"
-        :label="$t('import:importType')"
+      <FormFieldSelect
+          v-model:value="values.strategy"
+          :options="strategyOptionList"
+          :error="errors.strategy"
+          name="importType"
+          :label="$i18n.t('import:importType')"
       />
 
-      <form-field-file-input
-        v-model="values.file"
-        :error="errors.file"
-        :label="$t('import:file')"
-        name="file"
-        :scenario="strategyFileScenario"
+      <FormFieldFileInput
+          v-model:value="values.file"
+          :error="errors.file"
+          :label="$i18n.t('import:file')"
+          name="file"
+          :scenario="strategyFileScenario"
       />
 
       <DynamicField
-        v-for="field of templateValues"
-        :key="field.config.name"
-        :field="field"
+          v-for="field of templateValues"
+          :key="field.config.name"
+          :field="field"
       />
     </form>
 
-    <template v-slot:footer>
+    <template #footer>
       <FormFooter
-        :back-href="getImportListUrl()"
-        :on-submit="submitForm"
-        :is-submitting="isSubmitting"
-        :is-creation="true"
+          :back-href="getImportListUrl()"
+          @submit="submitForm"
+          :is-submitting="isSubmitting"
+          :is-creation="true"
       />
     </template>
-  </page>
+  </Page>
 </template>
 
 <script lang="ts">
-import { defineComponent, watch } from '@vue/composition-api';
-import { computed, onMounted, ref } from '@vue/composition-api';
+import {defineComponent, watch, computed, onMounted, ref} from 'vue';
 
-import { convertRequestErrorToMap, useResource } from '@tager/admin-services';
+import {convertRequestErrorToMap, navigateBack, useI18n, useResource, useToast} from '@tager/admin-services';
 import {
   OptionType,
   TagerFormSubmitEvent,
   FormFooter,
-  useTranslation,
+  FormFieldFileInput, FormFieldSelect
 } from '@tager/admin-ui';
 import {
   DynamicField,
@@ -56,42 +55,46 @@ import {
   universalFieldUtils,
 } from '@tager/admin-dynamic-field';
 
-import { createImport, getModuleInfo } from '../../services/requests';
-import { getImportListUrl } from '../../utils/paths';
+import {createImport, getModuleInfo} from '../../services/requests';
+import {getImportListUrl} from '../../utils/paths';
 
 import {
   convertImportFormValuesToCreationPayload,
   convertStrategiesToStrategyOptionList,
   FormValues,
 } from './ImportForm.helpers';
+import {useRouter} from "vue-router";
+import {Page} from "@tager/admin-layout";
 
 export default defineComponent({
   name: 'ImportForm',
-  components: { DynamicField, FormFooter },
-  setup(props, context) {
-    const { t } = useTranslation(context);
+  components: {Page, FormFieldFileInput, DynamicField, FormFooter, FormFieldSelect},
+  setup() {
+    const {t} = useI18n();
+
+    const toast = useToast();
+    const router = useRouter();
 
     /** Strategies */
 
     const [
       fetchModuleInfo,
-      { data: moduleInfo, loading: isModuleInfoLoading },
+      {data: moduleInfo, loading: isModuleInfoLoading},
     ] = useResource({
       fetchResource: getModuleInfo,
       initialValue: {
         fileScenario: '',
         strategies: [],
       },
-      context,
       resourceName: 'Module info',
     });
 
     const strategyFileScenario = computed<string>(
-      () => moduleInfo.value.fileScenario
+        () => moduleInfo.value.fileScenario
     );
 
     const strategyOptionList = computed<Array<OptionType>>(() =>
-      convertStrategiesToStrategyOptionList(moduleInfo.value.strategies)
+        convertStrategiesToStrategyOptionList(moduleInfo.value.strategies)
     );
 
     onMounted(() => {
@@ -101,28 +104,28 @@ export default defineComponent({
     /** Form state */
 
     const errors = ref<Record<string, string>>({});
-    const values = ref<FormValues>({ strategy: null, file: null });
+    const values = ref<FormValues>({strategy: null, file: null});
     const isSubmitting = ref<boolean>(false);
     const templateValues = ref<Array<FieldUnion>>([]);
 
     function updateTemplateValues() {
       const selectedStrategy = moduleInfo.value.strategies.find(
-        (strategy) => strategy.id === values.value.strategy?.value
+          (strategy) => strategy.id === values.value.strategy?.value
       );
 
       const fieldTemplateList: Array<FieldConfigUnion> =
-        selectedStrategy?.fields ?? [];
+          selectedStrategy?.fields ?? [];
 
       templateValues.value = fieldTemplateList.map((fieldConfig) =>
-        universalFieldUtils.createFormField(fieldConfig, null)
+          universalFieldUtils.createFormField(fieldConfig, null)
       );
     }
 
     watch(
-      () => values.value.strategy,
-      () => {
-        updateTemplateValues();
-      }
+        () => values.value.strategy,
+        () => {
+          updateTemplateValues();
+        }
     );
 
     onMounted(() => {
@@ -133,41 +136,41 @@ export default defineComponent({
       isSubmitting.value = true;
 
       const creationPayload = convertImportFormValuesToCreationPayload(
-        values.value,
-        templateValues.value
+          values.value,
+          templateValues.value
       );
 
       createImport(creationPayload)
-        .then(() => {
-          errors.value = {};
+          .then(() => {
+            errors.value = {};
 
-          if (
-            event.type === 'create' ||
-            event.type === 'save' ||
-            event.type === 'create_exit' ||
-            event.type === 'save_exit'
-          ) {
-            context.root.$router.push(getImportListUrl());
-          }
+            if (
+                event.type === 'create' ||
+                event.type === 'save' ||
+                event.type === 'create_exit' ||
+                event.type === 'save_exit'
+            ) {
+              navigateBack(router, getImportListUrl());
+            }
 
-          context.root.$toast({
-            variant: 'success',
-            title: t('import:success'),
-            body: t('import:createdSuccessMessage'),
+            toast.show({
+              variant: 'success',
+              title: t('import:success'),
+              body: t('import:createdSuccessMessage'),
+            });
+          })
+          .catch((error) => {
+            console.error(error);
+            errors.value = convertRequestErrorToMap(error);
+            toast.show({
+              variant: 'danger',
+              title: t('import:error'),
+              body: t('import:createdErrorMessage'),
+            });
+          })
+          .finally(() => {
+            isSubmitting.value = false;
           });
-        })
-        .catch((error) => {
-          console.error(error);
-          errors.value = convertRequestErrorToMap(error);
-          context.root.$toast({
-            variant: 'danger',
-            title: t('import:error'),
-            body: t('import:createdErrorMessage'),
-          });
-        })
-        .finally(() => {
-          isSubmitting.value = false;
-        });
     }
 
     /** Is content loading **/

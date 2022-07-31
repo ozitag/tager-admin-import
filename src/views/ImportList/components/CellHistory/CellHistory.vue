@@ -10,14 +10,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/composition-api';
+import {defineComponent, PropType} from "vue";
+import {dateTimeFormat} from './CellHistory.helpers';
+import {HistoryType} from "../../../../typings/model";
 
-import { HistoryType } from '../../../../typings/model';
-
-import { Props } from './CellHistory.types';
-import { dateTimeFormat } from './CellHistory.helpers';
-
-export default defineComponent<Props>({
+export default defineComponent({
   name: 'CellHistory',
   props: {
     history: {
@@ -36,6 +33,6 @@ export default defineComponent<Props>({
 <style lang="scss" scoped>
 .name {
   display: inline-block;
-  width: 75px;
+  width: 100px;
 }
 </style>
