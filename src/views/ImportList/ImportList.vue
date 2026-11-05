@@ -37,7 +37,6 @@ import {
   useDataTable,
   DataTable
 } from '@tager/admin-ui';
-
 import {
   Page
 } from '@tager/admin-layout';

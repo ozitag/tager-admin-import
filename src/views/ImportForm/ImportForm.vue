@@ -30,9 +30,9 @@
     <template #footer>
       <FormFooter
           :back-href="getImportListUrl()"
-          @submit="submitForm"
           :is-submitting="isSubmitting"
           :is-creation="true"
+          @submit="submitForm"
       />
     </template>
   </Page>
@@ -40,6 +40,7 @@
 
 <script lang="ts">
 import {defineComponent, watch, computed, onMounted, ref} from 'vue';
+import {useRouter} from "vue-router";
 
 import {convertRequestErrorToMap, navigateBack, useI18n, useResource, useToast} from '@tager/admin-services';
 import {
@@ -54,6 +55,7 @@ import {
   type FieldUnion,
   universalFieldUtils,
 } from '@tager/admin-dynamic-field';
+import {Page} from "@tager/admin-layout";
 
 import {createImport, getModuleInfo} from '../../services/requests';
 import {getImportListUrl} from '../../utils/paths';
@@ -63,8 +65,6 @@ import {
   convertStrategiesToStrategyOptionList,
   type FormValues,
 } from './ImportForm.helpers';
-import {useRouter} from "vue-router";
-import {Page} from "@tager/admin-layout";
 
 export default defineComponent({
   name: 'ImportForm',

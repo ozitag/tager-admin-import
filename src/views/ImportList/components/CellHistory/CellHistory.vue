@@ -11,8 +11,10 @@
 
 <script lang="ts">
 import {defineComponent, type PropType} from "vue";
-import {dateTimeFormat} from './CellHistory.helpers';
+
 import {type HistoryType} from "../../../../typings/model";
+
+import {dateTimeFormat} from './CellHistory.helpers';
 
 export default defineComponent({
   name: 'CellHistory',
