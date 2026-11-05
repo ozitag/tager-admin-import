@@ -1,7 +1,7 @@
-import { OptionType, SingleFileInputValueType } from '@tager/admin-ui';
-import { FieldUnion, universalFieldUtils } from '@tager/admin-dynamic-field';
+import { type OptionType, type SingleFileInputValueType } from '@tager/admin-ui';
+import { type FieldUnion, universalFieldUtils } from '@tager/admin-dynamic-field';
 
-import { ImportCreatePayload, StrategyType } from '../../typings/model';
+import { type ImportCreatePayload, type StrategyType } from '../../typings/model';
 
 export type FormValues = {
   strategy: OptionType | null;

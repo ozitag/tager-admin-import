@@ -33,7 +33,7 @@
 import {defineComponent, onMounted} from 'vue';
 
 import {
-  ColumnDefinition,
+  type ColumnDefinition,
   useDataTable,
   DataTable
 } from '@tager/admin-ui';
@@ -44,7 +44,7 @@ import {
 import {useI18n} from "@tager/admin-services";
 
 import {getImportList} from '../../services/requests';
-import {ImportType} from '../../typings/model';
+import {type ImportType} from '../../typings/model';
 import {getImportFormUrl} from '../../utils/paths';
 
 import {CellHistory} from './components/CellHistory';

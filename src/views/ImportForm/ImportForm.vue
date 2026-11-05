@@ -43,15 +43,15 @@ import {defineComponent, watch, computed, onMounted, ref} from 'vue';
 
 import {convertRequestErrorToMap, navigateBack, useI18n, useResource, useToast} from '@tager/admin-services';
 import {
-  OptionType,
-  TagerFormSubmitEvent,
+  type OptionType,
+  type TagerFormSubmitEvent,
   FormFooter,
   FormFieldFileInput, FormFieldSelect
 } from '@tager/admin-ui';
 import {
   DynamicField,
-  FieldConfigUnion,
-  FieldUnion,
+  type FieldConfigUnion,
+  type FieldUnion,
   universalFieldUtils,
 } from '@tager/admin-dynamic-field';
 
@@ -61,7 +61,7 @@ import {getImportListUrl} from '../../utils/paths';
 import {
   convertImportFormValuesToCreationPayload,
   convertStrategiesToStrategyOptionList,
-  FormValues,
+  type FormValues,
 } from './ImportForm.helpers';
 import {useRouter} from "vue-router";
 import {Page} from "@tager/admin-layout";

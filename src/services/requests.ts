@@ -1,9 +1,9 @@
-import { request, ResponseBody } from '@tager/admin-services';
+import { request, type ResponseBody } from '@tager/admin-services';
 
 import {
-  ModuleInfoType,
-  ImportCreatePayload,
-  ImportType,
+  type ModuleInfoType,
+  type ImportCreatePayload,
+  type ImportType,
 } from '../typings/model';
 
 export function getImportList(params?: {
