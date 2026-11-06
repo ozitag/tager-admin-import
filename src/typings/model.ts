@@ -15,7 +15,7 @@ export interface ParamType {
   readonly value: string;
 }
 
-export interface ImportType {
+export type ImportType = {
   readonly id: number;
   readonly strategy: string;
   readonly status: string;
